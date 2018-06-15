@@ -7,7 +7,7 @@
       Add
     </button>
   </p>
-  <div class="panel-block">
+  <div class="panel-block" >
     <p class="control has-icons-left">
       <input class="input is-small" type="text" placeholder="search">
       <span class="icon is-small is-left">
@@ -16,9 +16,9 @@
     </p>
   </div>
   
-  <a class="panel-block">
+  <a class="panel-block" v-for="item,key in lists">
     <span class="column is-9">
-          bulma
+          {{item.name}}
     </span>
     <span class="panel-icon is-1">
       <i class="has-text-info  fa fa-eye" aria-hidden="true"></i>
@@ -36,22 +36,29 @@
 </div>
 </template>
 <script>
-let Add = require('./Add.vue');
-export default{
-    components:{Add},
-    data(){
-return {
-    addActive:''
-}
+let Add = require("./Add.vue");
+export default {
+  components: { Add },
+  data() {
+    return {
+      addActive: "",
+      lists: {},
+      errors:{}
+    };
+  },
+  mounted() {
+    axios
+      .post("/getData")
+      .then((response) => this.lists = response.data)
+      .catch((error) => this.errors = error.response.data.errors);
+  },
+  methods: {
+    OpenAdd() {
+      this.addActive = "is-active";
     },
-    methods:{
-        OpenAdd(){
-            this.addActive='is-active';
-
-        },
-        close(){
-            this.addActive='';
-        }
+    close() {
+      this.addActive = "";
     }
+  }
 };
 </script>
